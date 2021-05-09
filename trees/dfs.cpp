@@ -8,7 +8,7 @@ class Node {
 
 		Node(string str) { name = str; }
 
-		//time O(v+e) and space O(v)
+		//time O(v+e) and space O(v) - v-vertices and e -edges
 		vector<string> depthFirstSearch(vector<string> *array) {
 			array->push_back(name);
 			for(auto a: children){
