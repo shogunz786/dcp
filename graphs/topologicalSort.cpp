@@ -1,3 +1,8 @@
+/*
+ * given jobs 1,2,3,4
+ * dependencies for jobs 1-2,1-3,3-2,4-2,4-5 second jod depends on first
+ * return list of jovs with valid order of job completion. 1,4,3,2 or 4,1,3,2
+ */
 #include <vector>
 #include <stack>
 #include <set>
