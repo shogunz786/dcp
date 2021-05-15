@@ -19,6 +19,7 @@ nums is sorted in non-decreasing order.
  */
 class Solution {
 public:
+    //O(nlogn time and O(n) space
     vector<int> sortedSquares1(vector<int>& nums) {
         for(int i=0;i<nums.size();i++){
             nums[i]=nums[i]*nums[i];
@@ -28,6 +29,7 @@ public:
     }
 
     /*Two pointer with extra space O(n)*/
+    //O(n) time and O(n) space
     vector<int> sortedSquares(vector<int>& nums) {
         vector<int> res(nums.size(),0);
         int l=0, r= nums.size()-1;
