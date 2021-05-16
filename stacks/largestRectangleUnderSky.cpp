@@ -50,26 +50,17 @@ int largestRectangleUnderSkylineBruteForce(vector<int> buildings) {
 	int maxArea=0;
 	for(int i=0; i<buildings.size(); i++){
 		//go left till u find smaller building
-		int left=0;
-		int j=i-1;
-		while(j>=0){
-			if(buildings[i]>buildings[j]){
-				left=j.
-				break;
-			}
-			j--;
+		int left=i-1;
+		while(left>=0 && buildings[i]<=buildings[left]){
+			left--;
 		}
 		//go right till u find smaller building
-		j=i+1;
-		right=buildings.size()-1;;
-		while(j<buildings.size()){
-			if(buildings[i]>buildings[j]){
-				right=j.
-				break;
-			}
-			j++;
+		int right=i+1;;
+		while(right<buildings.size() && buildings[i]<=buildings[right]){
+			right++;
 		}
-		maxArea=max(maxArea,(right-left-1)*buildings[i]);
+		int area=(right-left-1)*buildings[i];
+		maxArea=max(maxArea,area);
 	}
 	return maxArea;
 }
