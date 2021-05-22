@@ -40,33 +40,36 @@ bool wildCardMatch(string text, string pattern)
 }
 
 bool wildCardRecursive(string text, string pattern);
-{
+{       
+	//reach end of match time to make a decision
 	if(pattern.length()==0){
 	  if(text.length()==0){
 		  //reached end for both so matched
 		  return true;
 		}else{
+		  //did not reach end of text
 		  return false;
 		}
 	}
 
+	//reach end of text but may not be end of pattern
 	if(text.length()==0){
 	   if(!pattern.compare("*")){
 	      //reach end of text and last char in pattern is not '*' 
               return false;
-	   }else{
-              return true;
 	   }
+           //there could be more than one '*' let's check
 	}
 
 	//char matches or pattern has '.'
 	if(pattern.length() > 0 && text.length() > 0 &&
-          (pattern[0]=='.' || pattern[0] == text[0]))
-		return regexMatch(text.substr(1), pattern.substr(1));
+          (pattern[0]=='.' || pattern[0] == text[0])){
+		return wildCardRecursive(text.substr(1), pattern.substr(1));
 	//'*' found so ignore '*' or ignore char in text
-	if(pattern.length()>0 && pattern[0]=='*')
-		return regexMatch(text.substr(1), pattern) ||
-		       regexMatch(text, pattern.substr(1));
+	}else if(pattern.length()>0 && pattern[0]=='*')
+		//could have reached end of text but did not reach end of the pattern
+		return (text.length()>0 && wildCardRecursive(text.substr(1), pattern)) ||
+		       wildCardRecursive(text, pattern.substr(1));
 	return false;
 }
 
