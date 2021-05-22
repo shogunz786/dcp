@@ -41,12 +41,24 @@ bool wildCardMatch(string text, string pattern)
 
 bool wildCardRecursive(string text, string pattern);
 {
-	//reached end for both so matched
-	if(text.length()==0 && pattern.length()==0)
-		return true;
-	//reach end of text and last char in pattern is not '*' 
-	if(text.length()==0 && !pattern.compare("*"))
-                return false;
+	if(pattern.length()==0){
+	  if(text.length()==0){
+		  //reached end for both so matched
+		  return true;
+		}else{
+		  return false;
+		}
+	}
+
+	if(text.length()==0){
+	   if(!pattern.compare("*")){
+	      //reach end of text and last char in pattern is not '*' 
+              return false;
+	   }else{
+              return true;
+	   }
+	}
+
 	//char matches or pattern has '.'
 	if(pattern.length() > 0 && text.length() > 0 &&
           (pattern[0]=='.' || pattern[0] == text[0]))
