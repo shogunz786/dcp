@@ -58,49 +58,7 @@ bool wildCardRecursive(string text, string pattern);
 	return false;
 }
 
-
-
-using namespace std;
-bool helper(string filename, string pattern, int fIdx=0, int pIdx=0, string tab=""){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-	//scanned all the pattern so match is good
-	if(pattern.length()==pIdx && filename.length()==fIdx){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-	   return true;
-	}
-	
-	if(filename.length()==fIdx){
-		if(pattern[pIdx]!='*'){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-			return false;
-		}else if(pattern[pIdx]!='*' &&
-						 pIdx+1==pattern.length()){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-			return true;
-		}
-	}
-	
-	//if don't care or char match skip and go to next char in filename and pattern
-	if(pattern[pIdx]=='?' || filename[fIdx]==pattern[pIdx]){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-		return helper(filename, pattern,fIdx+1,pIdx+1,tab+" ");
-	}else if(pattern.length()>0 && 
-					 pattern[pIdx]=='*'){
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-		//check scenario where ignore filename char but continue to match '*'
-		//match '*' with nothing and continue with next pattern index
-		return helper(filename, pattern,pIdx+1,fIdx,tab+" " ) || 
-			     helper(filename, pattern,pIdx,fIdx+1,tab+" " );
-	}
-	
-	cout<<tab<<__FILE__<<":"<<__LINE__<<" fIdx="<<fIdx<<", pIdx="<<pIdx<<endl;
-	return false;
-	 
-}
-bool globMatching1(string fileName, string pattern) {
-  return helper(fileName, pattern);
-}
-
+//O(n*m) space and O(n*m) time
 bool globMatching(string filename, string pattern){
 	//init dp with filename.length()+1 X patten.length()+1 matrix inited to false
 	vector<vector<bool>> dp(filename.length()+1, vector<bool>(pattern.length()+1, false));
