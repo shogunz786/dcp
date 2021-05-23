@@ -38,18 +38,18 @@ int findClosestValueInBst(BST *tree, int target) {
 //time O(N) and space O(1)
 int findClosestValueInBst(BST *tree, int target) {
   // Write your code here.
-	int closest=tree->value;
-	while(tree){
-	  if(abs(target-closest)>abs(target-tree->value)){
-           closest=tree->value;
-	  }
-		if(target>tree->value){
+  int closest=tree->value;
+  while(tree){
+    if(abs(target-closest)>abs(target-tree->value)){
+       closest=tree->value;
+    }
+    if(target>tree->value){
        tree=tree->right;
-		}else if(target<tree->value){
+    }else if(target<tree->value){
        tree=tree->left;
-		}else{
-			return tree->value;
-		}
-	}
-	return closest;
+    }else{
+       return tree->value;
+    }
+  }
+  return closest;
 }
