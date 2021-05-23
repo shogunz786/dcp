@@ -40,9 +40,9 @@ int findClosestValueInBst(BST *tree, int target) {
   // Write your code here.
 	int closest=tree->value;
 	while(tree){
-		if(abs(target-closest)>abs(target-tree->value)){
-       closest=tree->value;
-		}
+	  if(abs(target-closest)>abs(target-tree->value)){
+           closest=tree->value;
+	  }
 		if(target>tree->value){
        tree=tree->right;
 		}else if(target<tree->value){
