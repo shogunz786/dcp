@@ -52,6 +52,23 @@ vector<int> find_max_sliding_window(vector<int>& v, int window_size) {
   else
     return result;
 }
+//similiar solution
+vector<int> find_max_sliding_window2(vector<int>& v, int window_size) {
+ vector<int> result;
+ deque<int> temp;
+ for(int i=0; i<v.size(); i++){
+     while(temp.size() && v[temp.back()]<v[i])
+           temp.pop_back();
+    temp.push_back(i); 
+    if(i>=window_size-1){
+         while(temp.size() && temp.front()<=i-window_size)
+            temp.pop_front();
+       cout<<v[temp.front()]<<endl;
+       result.push_back(v[temp.front()]);
+    }
+ }
+ return result;
+}
 
 int main(int argc, const char * argv[])
 {
