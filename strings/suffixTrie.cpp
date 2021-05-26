@@ -1,3 +1,32 @@
+/*
+ Build a Suffix Trie and add functions to populate the suffix trie and check if string is present in the suffix Trie.
+ input: babc
+ output:
+ "trie": {
+    "a": {
+      "b": {
+        "c": {
+          "*": true
+        }
+      }
+    },
+    "b": {
+      "a": {
+        "b": {
+          "c": {
+            "*": true
+          }
+        }
+      },
+      "c": {
+        "*": true
+      }
+    },
+    "c": {
+      "*": true
+    }
+  }
+  */
 #include <unordered_map>
 using namespace std;
 
