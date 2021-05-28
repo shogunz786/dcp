@@ -24,6 +24,7 @@ bool isBalanced(string str){
 }
 
 //O(n^3) time and O(n) space
+//Check if each substring is balanced and capture max length
 int longestBalancedSubstringBF(string str) {
 	int longest=INT_MIN;
 	//at each index of the string
@@ -39,6 +40,9 @@ int longestBalancedSubstringBF(string str) {
 }
 
 //O(n) time and O(n) space
+// keep track of begining index, with init set to -1
+// keep track of max balanced length and
+// replace beginning index as needed
 int longestBalancedSubstringIter(string str) {
 	int longest=0;
 	//init with -1 position
@@ -65,6 +69,8 @@ int longestBalancedSubstringIter(string str) {
 }
 
 //O(n) time and O(1) space
+//scan left to right till more closes than opens and record max len
+//scan right to left till more opens than closes and record max len
 int longestBalancedSubstring(string str) {
 	int opening=0;
 	int closing=0;
@@ -108,4 +114,3 @@ int longestBalancedSubstring(string str) {
 	return longest;
 }
 	
-
