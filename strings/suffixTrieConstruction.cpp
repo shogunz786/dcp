@@ -33,38 +33,38 @@ public:
     this->populateSuffixTrieFrom(str);
   }
 
-	//time O(N^2) and space O(N^2)
-  void populateSuffixTrieFrom(string str) {
+//time O(N^2) and space O(N^2)
+void populateSuffixTrieFrom(string str) {
     for(int i=0; i<str.length(); i++){
-			TrieNode* cur=this->root;
-			//keep taking substring starting from index 0,1 and so on
-			//and keep inserting starting from root for each substring
-			for(int j=i; j<str.length(); j++){
-				char c=str[j];
-				//if current char not found create a new node and insert
-    		if(cur->children.find(c)==cur->children.end()){
-		     	 cur->children.insert({c,new TrieNode()});
-			  }
-				//go to the next node and check for next char
-				cur=cur->children[c];
-		  }
-			//insert '*' at the end of substring
-			cur->children.insert({this->endSymbol,NULL});
-		}
-  }
+	    TrieNode* cur=this->root;
+	    //keep taking substring starting from index 0,1 and so on
+	    //and keep inserting starting from root for each substring
+	    for(int j=i; j<str.length(); j++){
+		    char c=str[j];
+		    //if current char not found create a new node and insert
+    	    if(cur->children.find(c)==cur->children.end()){
+		       cur->children.insert({c,new TrieNode()});
+		    }
+		    //go to the next node and check for next char
+		    cur=cur->children[c];
+	    }
+	    //insert '*' at the end of substring
+	    cur->children.insert({this->endSymbol,NULL});
+     }
+ }
 
-	//time O(N) and space O(1)
-  bool contains(string str) {
-		TrieNode* cur=this->root;
+//time O(N) and space O(1)
+ bool contains(string str) {
+    TrieNode* cur=this->root;
     for(auto c: str){
-			//if you can't find the next char return false
-    	if(cur->children.find(c)==cur->children.end()){
-		   	return false;
-		  }
-			//go to next node and check for next char
-			cur=cur->children[c];
-		}
-		//make sure the end of the substring is reached for a perfect match
+	   //if you can't find the next char return false
+       if(cur->children.find(c)==cur->children.end()){
+	      return false;
+	   }
+	   //go to next node and check for next char
+	   cur=cur->children[c];
+    }
+    //make sure the end of the substring is reached for a perfect match
     return cur->children.find(this->endSymbol)!=cur->children.end();
   }
 };
