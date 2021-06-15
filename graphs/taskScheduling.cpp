@@ -29,6 +29,7 @@ using namespace std;
 
 class TaskScheduling {
  public:
+ //O(V+E) time and O(V+E) space V - vertices and E - Edges
   static bool isSchedulingPossible(int tasks, const vector<vector<int>>& prerequisites) {
     vector<int> inDegree(tasks,0);
     queue<int> sources;
