@@ -40,3 +40,45 @@ bool Graph::isCycleDFS()
 		if(isCycleDFSUtil(i, &visited, recStack))
 			return true;
 }
+
+
+
+#include <vector>
+using namespace std;
+//O(V+E) time and O(V) space
+bool checkCycle(int v, vector<vector<int>> &graph,
+							 vector<int> &visited,
+							 vector<int> & visiting){
+	if(visiting[v]){
+		return true;
+	}
+
+	visiting[v]=true;
+
+		for(auto a: graph[v])
+		{
+			if(visited[a]==false && 
+				 checkCycle(a,graph,visited,visiting))
+			{
+				return true;
+			}	
+		}	
+
+ visiting[v]=false;
+ visited[v]=true;
+ return false;
+}
+
+bool cycleInGraph(vector<vector<int>> graph) {
+	vector<int> visited(graph.size(),0),visiting(graph.size(),0);
+
+	for(int i=0; i<graph.size(); i++){
+		if(visited[i])
+			continue;
+		if(checkCycle(i,graph,visited,visiting)){
+			return true;
+		}
+	}
+	
+  return false;
+}
