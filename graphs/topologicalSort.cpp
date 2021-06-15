@@ -65,3 +65,81 @@ vector<int> topologicalSort(vector<int> jobs, vector<vector<int>> deps) {
 	}
   return res;
 }
+
+//Use inDegree tracking
+using namespace std;
+
+#include <iostream>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <stack>
+#include <vector>
+
+class TopologicalSort {
+ public:
+  static vector<int> sort(int vertices, const vector<vector<int>>& edges) {
+    vector<int> sortedOrder;
+    vector<int> inDegree(vertices, 0);
+    queue<int> sources;
+    unordered_map<int, vector<int>>  mp;
+    stack<int> res;
+    for(auto v: edges){
+      inDegree[v[1]]++;//keep track of incoming connections
+      if(mp.find(v[0])==mp.end()){
+        mp.insert({v[0],{}});
+      }
+      mp[v[0]].push_back(v[1]);
+    }
+    for(int i=0; i<vertices; i++){
+       if(inDegree[i]==0){//use the vertex with zero incoming            
+         sources.push(i);//connections as starting vertices to explore paths
+       }
+    }
+    while(sources.size()){
+      int v = sources.front();
+      sources.pop();
+      sortedOrder.push_back(v);
+      if(mp.find(v)!=mp.end()){
+         for(auto a: mp[v]){
+           inDegree[a]--;//deduct incoming path as exploration is complete
+           if(inDegree[a]==0){
+             sources.push(a);
+           }
+         }
+      }
+    }
+    if(sortedOrder.size()!=vertices)//if there are cycles return empty array
+        return vector<int>();
+    return sortedOrder;
+  }
+
+};
+
+int main(int argc, char* argv[]) {
+  vector<int> result =
+      TopologicalSort::sort(4, vector<vector<int>>{vector<int>{3, 2}, vector<int>{3, 0},
+                                                   vector<int>{2, 0}, vector<int>{2, 1}});
+  for (auto num : result) {
+    cout << num << " ";
+  }
+  cout << endl;
+
+  result = TopologicalSort::sort(
+      5, vector<vector<int>>{vector<int>{4, 2}, vector<int>{4, 3}, vector<int>{2, 0},
+                             vector<int>{2, 1}, vector<int>{3, 1}});
+  for (auto num : result) {
+    cout << num << " ";
+  }
+  cout << endl;
+
+  result = TopologicalSort::sort(
+      7, vector<vector<int>>{vector<int>{6, 4}, vector<int>{6, 2}, vector<int>{5, 3},
+                             vector<int>{5, 4}, vector<int>{3, 0}, vector<int>{3, 1},
+                             vector<int>{3, 2}, vector<int>{4, 1}});
+  for (auto num : result) {
+    cout << num << " ";
+  }
+  cout << endl;
+}
+
