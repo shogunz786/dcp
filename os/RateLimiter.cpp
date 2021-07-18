@@ -31,6 +31,12 @@ out bursts. Systems such as Redis facilitate this technique with expiring keys.
 	limit has been reached for the interval.
 	Assume doWork and doDrop are asynchronous functions.
 */
+#include <iostream>
+#include <sys/time.h>
+#include <ctime>
+
+using std::cout; using std::endl;
+
 queue<int> timeq;
 int intervalMS = 2000; // two seconds (as an example)
 int n = 10; // 10 requests per 2 seconds (as an example)
@@ -51,3 +57,76 @@ void OnRequestRecieve(Req& r) {
 		}
 	}
 }
+
+class RateLimiter {
+	public:
+	int maxRequestPerSec;
+	RateLimiter(int persec){
+		maxRequestPerSec = persec;
+	}	
+	virtual bool allow()=0;
+};
+
+class FixedWindowCounter: public RateLimiter {
+	public:
+		pthread_mutex_t lock;
+		//instead of single lock using a segment lock like concurrent map in java
+		//can improve rentrance and using atomic instead of int in tracking events
+		//in windows will improve concurrency
+		unordered_map<time_t,int> windows;
+		FixedWindowCounter(int persec) : RateLimiter(persec){
+			lock = PTHREAD_MUTEX_INITIALIZER;
+		}
+		bool allow(){
+			bool ret = true;
+			pthread_mutex_lock(&lock);
+			struct timeval time_now{};
+                        gettimeofday(&time_now, nullptr);
+			time_t windowKey = ((time_now.tv_sec * 1000) + (time_now.tv_usec / 1000))/1000*1000;
+		        if(windows.find(windowKey)==windows.end()){
+				windows.insert({windowKey,0});
+			}	
+			windows[windowKey]++;
+			ret = windows[windowKey]<=maxRequestPerSec;
+			pthread_mutex_unlock(&lock);
+			return ret;
+		}
+};
+
+class SlidingWindow : public RateLimiter {
+	public:
+		pthread_mutex_t lock;
+		//instead of single lock using a segment lock like concurrent map in java
+		//can improve rentrance and using atomic instead of int in tracking events
+		//in windows will improve concurrency
+		unordered_map<time_t,int> windows;
+		SlidingWindowCounter(int persec) : RateLimiter(persec){
+			lock = PTHREAD_MUTEX_INITIALIZER;
+		}
+		bool allow(){
+			bool ret = true;
+			pthread_mutex_lock(&lock);
+			struct timeval time_now{};
+                        gettimeofday(&time_now, nullptr);
+			time_t curWindowKey = ((time_now.tv_sec * 1000) + (time_now.tv_usec / 1000))/1000*1000;
+			time_t preWindowKey = curWindowKey - 1000;
+			int preCount = 0;
+		        if(windows.find(curWindowKey)!=windows.end()){
+				windows.insert({curWindowKey,0});
+			}	
+			if(windows.find(preWindowKey)!=windows.end()){
+			   preCount = windows[preWindowKey];
+			}else{
+			   return windows[curWindowKey]<=maxRequestPerSec;
+			}
+
+			double preWeight = 1 - (
+		        if(windows.find(curWindowKey)==windows.end()){
+				windows.insert({curWindowKey,0});
+			}	
+			windows[curWindowKey]++;
+			ret = windows[curWindowKey]<=maxRequestPerSec;
+			pthread_mutex_unlock(&lock);
+			return ret;
+		}
+};
