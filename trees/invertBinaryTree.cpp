@@ -23,18 +23,6 @@ void invertBinaryTree(BinaryTree *tree) {
 	invertBinaryTree(tree->right);
 }
 
-//time O(N) and space O(N)
-void invertBinaryTree(BinaryTree *tree) {
-	while(tree){
-        }
-	if(tree==NULL) return;
-	BinaryTree *temp = tree->right;
-	tree->right = tree->left;
-	tree->left = temp;
-	invertBinaryTree(tree->left);
-	invertBinaryTree(tree->right);
-}
-
 void invertBinaryTree2(BinaryTree *tree) {
 	queue<BinaryTree *> q;
 	q.push(tree);
