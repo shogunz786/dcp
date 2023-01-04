@@ -1,35 +1,31 @@
 #include <vector>
 using namespace std;
 
-int partition(vector<int> &array, int left, int right, int pivot){
-  int i=left;
-  int j=left;
-  while(i<=right){
-    if(array[i]>pivot){
-      i++;
-    }else{
-      swap(array[i],array[j]);
-      i++;
-      j++;//next place to swap
+void quickSortHelper(vector<int> &array, int startIdx, int endIdx){
+  if(startIdx>=endIdx){
+    return;
+  }
+  int pivotIdx=startIdx;
+  int leftIdx = startIdx+1;
+  int rightIdx = endIdx;
+  while(leftIdx<=rightIdx){
+    if(array[leftIdx]>array[pivotIdx] && array[rightIdx]<array[pivotIdx]){
+      swap(array[leftIdx],array[rightIdx]);
+    }else if(array[leftIdx]<=array[pivotIdx]){
+      leftIdx++;
+    }else if(array[rightIdx]>=array[pivotIdx]){
+      rightIdx--;
     }
   }
-  return j-1;
-}
-
-void quickSortHelper(vector<int> &array, int left, int right){
-  if(left<right){
-    //pick right most as pivor
-    int pivot = array[right];
-    //find boundary of partitioned arrays
-    int pos = partition(array, left, right, pivot);
-    //sort right array
-    quickSortHelper(array, pos+1, right);
-    //sort left array
-    quickSortHelper(array, left, pos-1);
-
+  swap(array[pivotIdx],array[rightIdx]);
+  if(rightIdx-startIdx<endIdx-rightIdx){
+    quickSortHelper(array, startIdx, rightIdx-1);
+    quickSortHelper(array, rightIdx+1, endIdx);
+  }else{
+    quickSortHelper(array, rightIdx+1, endIdx);
+    quickSortHelper(array, startIdx, rightIdx-1);
   }
 }
-
 vector<int> quickSort(vector<int> array) {
   quickSortHelper(array, 0, array.size()-1);
   return array;
