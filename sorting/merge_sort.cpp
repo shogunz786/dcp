@@ -107,3 +107,53 @@ void msort_const_extra_space(vector<int>& arr, int l, int r, vector<int> &res)
      merge_const_extra_space(res,l,m,r);
    }   
 }
+
+
+
+//time O(nlogn) and space O(n)
+void doMerge(vector<int> &res, vector<int> &array,
+      int left, int mid, int right){
+  int i=0;
+  int l=left;
+  int r=mid+1;
+  int j=0;
+  //sort in auxilary array
+  while(l<=mid && r<=right){
+    if(array[l]<=array[r]){
+      res[i++]=array[l++];
+    }else{
+      res[i++]=array[r++];
+    }
+  }
+  while(l<=mid){
+    res[i++]=array[l++];
+  }
+  while(r<=right){
+    res[i++]=array[r++];
+  }
+  l=left;
+  //copy back to orginal array
+  for(;j<i; j++){
+    array[l++]=res[j];
+  }
+}
+
+void mergeSortHelper(vector<int> &res, vector<int> &array,
+      int left, int right){
+     if(left==right){
+       return;
+     }
+     int mid = (left+right)/2;
+     mergeSortHelper(res, array, left, mid);
+     mergeSortHelper(res, array, mid+1, right);
+     doMerge(res, array, left, mid, right);
+}
+
+vector<int> mergeSort(vector<int> array) {
+  if(array.size()<=1){
+    return array;
+  }
+  vector<int> aux(array.size(),0);
+  mergeSortHelper(aux, array, 0, array.size()-1);
+  return array;
+}
