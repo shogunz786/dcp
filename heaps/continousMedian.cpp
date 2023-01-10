@@ -1,124 +1,127 @@
-#include <vector>
-#include <iostream>
 using namespace std;
 
-// Do not edit the class below except for
-// the insert method. Feel free to add new
-// properties and methods to the class.
+bool max_heap_func(int a, int b){ return a>b; }
+bool min_heap_func(int a, int b){ return a<b; }
 
-class Heap{
-	public:
-	vector<int> h;
-	void insert(int n){
-		h.push_back(n);
-		siftUp(h.size()-1);
-	}
-	int peek(){
-		return h.size()?h[0]:-1;
-	}
-	int remove(){
-		int ret=-1;
-		if(h.size()){
-			ret = h[0];
-			swap(h[0],h[h.size()-1]);
-			h.pop_back();
-			siftDown(0);
-		}
-		return ret;
-	}
-	virtual void siftUp(int i)=0;
-	virtual void siftDown(int i)=0;
-};
+class Heap {
+public:
+vector<int> heap;
+function<bool(int,int)> compare_func;
 
-class MinHeap: public Heap{
-	public:
-	void siftUp(int i){
-		int p = (i-1)/2;
-		while(i>0 && h[i]<h[p])
-		{
-			swap(h[i],h[p]);
-			i=p;
-			p=(i-1)/2;
-		}
-	}
+void print(const char *str){
+  cout<<str<<" ";
+  for(auto a: heap){
+    cout<<a<<",";
+  }
+  cout<<endl;
+}
+
+int size(){
+  return heap.size();
+}
+
+Heap(vector<int> v, function<bool(int,int)> fn){
+  compare_func=fn;
+  heap = buildHeap(v);
+}
+
+void insert(int num){
+  heap.push_back(num);
+  siftUp(heap.size()-1, heap);
+}
+
+int remove(){
+  int res = peek();
+  swap(heap[0],heap[heap.size()-1]);
+  heap.pop_back();
+  siftDown(0, heap.size()-1, heap);
+  return res;
+}
+
+int peek(){
+  return heap[0];
+}
+
+//O(n) time and O(1) space
+vector<int> buildHeap(vector<int> &v){
+  int firstParentIdx = (v.size()-2)/2;
+  for(int i=firstParentIdx; i>=0; i--){
+    siftDown(i, v.size()-1, v);
+  }
+  return v;
+}
 	
-	void siftDown(int i){
-		int l=i*2+1;
-		int r=i*2+2;
-		int mn=i;
-		if(l<h.size() && h[l]<h[mn])
-			mn=l;
-		if(r<h.size() && h[r]<h[mn])
-			mn=r;
-		if(mn!=i){
-			swap(h[i],h[mn]);
-			siftDown(mn);
-		}
-	}
-};
-
-class MaxHeap: public Heap{
-	public:
-	void siftUp(int i){
-		int p = (i-1)/2;
-		while(i>0 && h[i]>h[p])
-		{
-			swap(h[i],h[p]);
-			i=p;
-			p=(i-1)/2;
-		}
-	}
-	
-	void siftDown(int i){
-		int l=i*2+1;
-		int r=i*2+2;
-		int mx=i;
-		if(l<h.size() && h[l]>h[mx])
-			mx=l;
-		if(r<h.size() && h[r]>h[mx])
-			mx=r;
-		if(mx!=i){
-			swap(h[i],h[mx]);
-			siftDown(mx);
-		}
-	}
-};
-
-
-
-class ContinuousMedianHandler {
-  public:
-    double median;
-    MaxHeap maxheap;//lowers
-	  MinHeap minheap;//highers
-	
-	//O(logn) time and O(n) space
-    void insert(int number) {
-			
-      // Write your code here.
-			//maintain lower half max vals in maxheap
-			if(maxheap.h.size()==0 || number<maxheap.peek()){
-				maxheap.insert(number);
-			}else{
-				//maintain upper half mins in minheap
-				minheap.insert(number);
-			}
-	    if((maxheap.h.size()-minheap.h.size())==2){
-				minheap.insert(maxheap.remove());
-			}else if((minheap.h.size()-maxheap.h.size())==2){
-				maxheap.insert(minheap.remove());
-			}
-			if(maxheap.h.size() == minheap.h.size()){
-				median=(double)(maxheap.peek()+minheap.peek())/2;
-			}else if(maxheap.h.size() > minheap.h.size()){
-				median=maxheap.peek();
-			}else{
-				median=minheap.peek();
-			}
-			
-		}
-
-    double getMedian() {
-      return median;
+//O(logn) time and O(1) space
+void siftUp(int currIdx, vector<int> &v){
+  int parentIdx = (currIdx-1)/2;
+  while(currIdx>0){
+    if(compare_func(v[currIdx],v[parentIdx])){
+      swap(v[currIdx],v[parentIdx]);
+      currIdx = parentIdx;
+      parentIdx = (currIdx-1)/2;
+    }else{
+      return;
     }
+  }
+}
+//O(logn) time and O(1) space
+void siftDown(int currIdx, int endIdx, vector<int> &v){
+  int childOne = 2*currIdx+1;
+  while(childOne<=endIdx){
+    int childTwo = 2*currIdx+2<=endIdx?2*currIdx+2:-1;
+    int idSwap = childOne;
+    if(childTwo!=-1){
+      if(compare_func(v[childTwo],v[childOne])){
+        idSwap=childTwo;
+      }
+    }
+    if(compare_func(v[idSwap],v[currIdx])){
+      swap(v[idSwap],v[currIdx]);
+      currIdx=idSwap;
+      childOne = 2*currIdx+1;
+    }else{
+      return;
+    }
+  }
+}
 };
+class ContinuousMedianHandler {
+public:
+  double median;
+  Heap lowers, greaters;
+
+  ContinuousMedianHandler():lowers({}, max_heap_func), greaters({}, min_heap_func){
+    median=0;
+  }
+
+  //O(logn) time and O(n) space
+  void insert(int number) {
+    if(lowers.size()==0 || number<lowers.peek()){
+      lowers.insert(number);
+    } else{
+      greaters.insert(number);
+    }
+    rebalance();
+    updateMedian();
+  }
+
+  void rebalance(){
+    if(lowers.size()-greaters.size()==2){
+      greaters.insert(lowers.remove());
+    }else if(greaters.size()-lowers.size()==2){
+      lowers.insert(greaters.remove());
+    }
+  }
+
+  void updateMedian(){
+    if(lowers.size()==greaters.size()){
+      median = ((double)lowers.peek()+(double)greaters.peek())/2;
+    }else if(lowers.size()>greaters.size()){
+      median=lowers.peek();
+    }else{
+      median=greaters.peek();
+    }
+  }
+  double getMedian() { return median; }
+};
+
