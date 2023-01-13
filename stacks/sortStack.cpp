@@ -15,7 +15,7 @@ void insertToSortedStack(vector<int> &stack, int value){
   //insert greater value back
   stack.push_back(removedGreaterValue);
 }
-
+//O(n^2) time and O(n) space
 vector<int> sortStack(vector<int> &stack) {
   if(stack.size()==0){
     return stack;
