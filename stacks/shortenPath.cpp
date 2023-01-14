@@ -10,66 +10,56 @@
  */
        
 
-#include <string>
 #include <sstream>
-#include <stack>
+#include <vector>
 #include <iostream>
 using namespace std;
 
-bool isEmpty(string &str){
-	for(auto s: str){
-		if(s != ' '){
-			return false;
-		}
-	}
-	return true;
-}
 
-//O(n) time and O(n) space
+// /foo
+// foo
+// ./foo
+// ../foo
+// foo/..
+
 string shortenPath(string path) {
-  // Write your code here.
-	stringstream ss(path);
-	int i=0;
-	string str;
-	vector<string> vstr;
-	vector<string> st;
-	
-	//get all tokens except // and /./ patterns
-	//ignore them
-	while(getline(ss,str,'/')){
-		if(str!="." && str.length()){
-		   vstr.push_back(str);	
-		}
-	}
-	
-	//add placeholder if path begins with /
-	if(path[0]=='/'){
-		st.push_back("");
-	}
-  for(auto str: vstr){	
-		if(str==".."){
-		  if(st.size()==0 || st[st.size()-1]==".."){
-				//first token is .. or previous is also ..
-				st.push_back(str);
-			}else if(st[st.size()-1] != ""){
-				//pop previous dir
-				st.pop_back();
-			}	
-		}else{
-			//add to list
-			st.push_back(str);
-		}
-	}
-	if(st.size()==1 && st[0]==""){
-		//only one entry with / marker
-		return "/";
-	}
-  ostringstream oss;	
-	for(auto i=0; i<st.size(); i++){
-		if(i!=0)
-			//do not add / for first entry
-			oss<<"/";
-		oss<<st[i];
-	}
-  return oss.str();
+  istringstream sstr(path);
+  string word;
+  vector<string> tokens;
+  vector<string> st;
+
+  //parse tokens, when starting with '/' first token is empty string
+  while(getline(sstr, word, '/')){
+    tokens.push_back(word);
+  }
+  //filter tokens	
+  for(int i=0; i<tokens.size(); i++){
+      string t = tokens[i];
+      if(i==0 && t == ""){//keep first empty to record starting '/'
+        st.push_back(t); 
+      }else if(t=="." || t==""){//remove all other '.' and ''
+        continue;
+      }else if(t==".."){
+        if(st.size()==0 || st.back()==".."){//st empty means not obsolute path and last is '..' then keep the new '..'
+            st.push_back(t); 
+        }else if(st.back()!=""){//keep begining empty string for obsolute path
+          st.pop_back();
+        }
+      }else{
+        st.push_back(t);  
+      }
+  }
+  ostringstream res;
+
+  for(int i=0; i<st.size(); i++){
+      if(st[i]==""){//first empty token means starts with '/'
+        res<<"/";
+      }else{
+        if(i!=0 && res.str()[res.str().length()-1]!='/'){//if obsolute path no need to add one more '/'
+          res<<'/'; 
+        }
+        res<<st[i];
+      }
+  }
+  return res.str();
 }
