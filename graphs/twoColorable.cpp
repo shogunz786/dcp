@@ -2,6 +2,8 @@
 #include <stack>
 using namespace std;
 
+//O(v+e) time and O(v) space
+//v - vertices. e - edges
 bool twoColorable(vector<vector<int>> edges) {
   //each index in edges is a vertex
   //each row in edges has vertex siblings
