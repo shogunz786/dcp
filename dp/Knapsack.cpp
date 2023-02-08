@@ -1,6 +1,7 @@
 #include <vector>
 using namespace std;
 
+//O(nc) time and O(nc) space
 vector<vector<int>> getKSItems(vector<vector<int>> &ksValues,
 vector<vector<int>> &items, int weight, int capacity){
   int c = capacity;
