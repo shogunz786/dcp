@@ -8,6 +8,7 @@ using namespace std;
 //          "<div></div><div><div></div></div>",
 //          "<div></div><div></div><div></div>"]
 
+//O((2n)!/((n!((n+1)!)))) time and O((2n)!/((n!((n+1)!)))) space
 void generateDivTagsHelper(int openingTag, int closingTag, string prefix, vector<string> &result){
 
   if(openingTag > 0){
