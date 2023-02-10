@@ -98,3 +98,53 @@ int maxProfitWithKTransactions(vector<int> prices, int k) {
   //max profit
   return profits[k][prices.size()-1];
 }
+
+//time O(t*d) and space O(t*d)
+//profits[t][d] = max (profits[t][d-1],
+//                max(prices[d]-prices[m]+
+//                profits[t-1][m]))
+//                where m is 0..d-1
+int maxProfitWithKTransactions(vector<int> prices, int k) {
+  if(prices.size()==0 || k==0){
+    return 0;
+  }
+  vector<vector<int>> profits(k+1, vector<int>(prices.size(),0));
+  //for 0 transactions profits are 0
+  //for first day no profits
+  for(int t=1; t<profits.size(); t++){
+    int maxDiff = -prices[0];
+    for(int d=1; d<prices.size(); d++){
+      //find max profit till dth day
+      //k=2 d=3
+      //m=0 profits[1][0]+profits[3]-profits[0]
+      //m=1 profits[1][1]+profits[3]-profits[1]
+      //m=2 profits[1][2]+profits[3]-profits[2]
+      // can also be written as 
+      //m=0 profits[1][0]-profits[0]+profits[3]
+      //m=1 profits[1][1]-profits[1]+profits[3]
+      //m=2 profits[1][2]-profits[2]+profits[3]
+      //profit[3] is constant
+      //so just need to keep track of max of 
+      //m=0 profits[1][0]-profits[0]
+      //m=1 profits[1][1]-profits[1]
+      //m=2 profits[1][2]-profits[2]
+      /*
+     int maxDiff = 0;
+     for(int m=0; m<d; m++){
+        //max profit till mth day + buy on mth day and sell on dth day
+        maxVal = max(maxVal,profits[t-1][m]+prices[d]-prices[m]);
+      }
+      //max profit till t - transactions in d days is
+      //max of profit till d-1th the day or profit till dth day
+      profits[t][d]=max(profits[t][d-1], maxVal);
+      */
+      //max profit till t - transactions in d days is
+      //max of profit till d-1th the day or profit till dth day
+      profits[t][d]=max(profits[t][d-1], prices[d]+maxDiff);
+      //maxDiff keeps track of max of profits[t-1][m]-prices[m]
+      maxDiff = max(profits[t-1][d]-prices[d], maxDiff);
+    }
+  }
+  //max profit
+  return profits[k][prices.size()-1];
+}
