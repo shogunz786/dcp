@@ -71,3 +71,30 @@ int maxProfitWithKTransactions(vector<int> prices, int k) {
 	}
   return k%2?oddprofits[prices.size()-1]:evenprofits[prices.size()-1];
 }
+
+
+//time O(t*d^2) and space O(t*d)
+//profits[t][d] = max (profits[t][d-1],
+//                max(prices[d]-prices[m]+
+//                profits[t-1][m]))
+//                where m is 0..d-1
+int maxProfitWithKTransactions(vector<int> prices, int k) {
+  vector<vector<int>> profits(k+1, vector<int>(prices.size(),0));
+  //for 0 transactions profits are 0
+  //for first day no profits
+  for(int t=1; t<profits.size(); t++){
+    for(int d=1; d<prices.size(); d++){
+      int maxVal = INT_MIN;
+      //find max profit till dth day
+     for(int m=0; m<d; m++){
+        //max profit till mth day + buy on mth day and sell on dth day
+        maxVal = max(maxVal,profits[t-1][m]+prices[d]-prices[m]);
+      }
+      //max profit till t - transactions in d days is
+      //max of profit till d-1th the day or profit till dth day
+      profits[t][d]=max(profits[t][d-1], maxVal);
+    }
+  }
+  //max profit
+  return profits[k][prices.size()-1];
+}
