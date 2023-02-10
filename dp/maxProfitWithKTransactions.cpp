@@ -91,7 +91,7 @@ int maxProfitWithKTransactions(vector<int> prices, int k) {
         maxVal = max(maxVal,profits[t-1][m]+prices[d]-prices[m]);
       }
       //max profit till t - transactions in d days is
-      //max of profit till d-1th the day or profit till dth day
+      //max of profit till d-1th day(not transacting on dth day) or profit till dth day(transacting on dth day)
       profits[t][d]=max(profits[t][d-1], maxVal);
     }
   }
