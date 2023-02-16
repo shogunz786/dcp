@@ -10,16 +10,21 @@ vector<vector<int>> neighbors = {
 	{0, 1}
 };
 
-bool isValidLocation(vector<vector<int>> &array, int r, int c){
-	return r<array.size() && c<array[0].size();
+void printElement(vector<vector<int>> &array, vector<int> element){
+
+	cout<<"array["<<element[0]<<"]["<<element[1]
+	<<"]="<<array[element[0]][element[1]]<<endl;
 }
 
-vector<int> pickNext(vector<vector<int>> &array, int row, int col){
-	int mxCarrots = INT_MIN;
+bool isValidLocation(vector<vector<int>> &array, int r, int c){
+	return r>=0 && c>=0 && r<array.size() && c<array[0].size();
+}
+
+vector<int> pickNext(vector<vector<int>> &array, vector<int> element, int mxCarrots=INT_MIN){
 	vector<int> mxLoc;
 	for(auto loc: neighbors) {
-		int r = row+loc[0];
-		int c = col+loc[1];
+		int r = element[0]+loc[0];
+		int c = element[1]+loc[1];
 		if(isValidLocation(array, r, c)){
 			if(mxCarrots<array[r][c] && array[r][c]>0){
 				mxCarrots = array[r][c];
@@ -35,25 +40,32 @@ vector<int> pickCenter(vector<vector<int>> &array){
 	int rmid = array.size()/2;
 	int cmid = array[0].size()/2;
 
-	int mxCarrots = array[rmid][cmid];
-	vector<int> mxLoc = {rmid, cmid};
-
-	for(auto loc: neighbors) {
-		int r = rmid+loc[0];
-		int c = cmid+loc[1];
-		if(isValidLocation(array, r, c)){
-			if(mxCarrots<array[r][c] && array[r][c]>0){
-				mxCarrots = array[r][c];
-				mxLoc = vector<int>{r, c};
-			}
-		}
+	vector<int> row_options = {rmid, rmid};
+	vector<int> col_options = {cmid, cmid};
+	
+	//when even more than one center
+	if(array.size()%2==0){
+		row_options[0]-=1;
+	}
+	//when even more than one center
+        if(array[0].size()%2==0){
+		col_options[0]-=1;
+	}
+	vector<int> cur, mxLoc;
+	int mxCarrots = INT_MIN;
+	int carrots;
+	//iterate all centers for max
+	for(auto i: row_options){
+	   for(auto j: col_options){
+	      cur = vector<int>{i,j};
+	      carrots = array[cur[0]][cur[1]];
+              if(mxCarrots<carrots){
+		      mxCarrots = carrots;
+		      mxLoc = cur;
+	      }
+	   }
 	}
 	return mxLoc;
-}
-
-void printElement(vector<vector<int>> &array, vector<int> element){
-
-	cout<<"array["<<element[0]<<"]["<<element[1]<<"]="<<array[element[0]][element[1]]<<endl;
 }
 
 int gatherCarrots(vector<vector<int>> &array){
@@ -65,14 +77,17 @@ int gatherCarrots(vector<vector<int>> &array){
 	vector<int> center = pickCenter(array);
 
 	vector<vector<int>> path;
+	//start from center
 	path.push_back(center);
 
+	vector<int> loc, nloc;
 	while(path.size()){
-		vector<int> loc = path.back();
-		//printElement(array, loc);
+		loc = path.back();
 		path.pop_back();
 		count += array[loc[0]][loc[1]];
-		vector<int> nloc = pickNext(array, loc[0], loc[1]);
+		//find next max element
+		nloc = pickNext(array, loc);
+		//mark visited
 		array[loc[0]][loc[1]] = -1;
 		if(nloc.size()!=0){
 			path.push_back(nloc);
