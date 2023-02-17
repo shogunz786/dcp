@@ -44,7 +44,7 @@ string getSlopeKey(vector<int> &a, vector<int> &b){
 
   return to_string(ydiff)+":"+to_string(xdiff);
 }
-
+//time O(n^2) and space O(n)
 int lineThroughPoints(vector<vector<int>> points) {
   string slopeKey;
   //when there is only one point 
