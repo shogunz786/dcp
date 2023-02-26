@@ -24,5 +24,7 @@ int nonConstructibleChange(vector<int> coins) {
 		//add coin to bag
 		currentMax+=c;
 	}
+	//when all given coins satisfy current coin > sum of total change in bag + 1
+	//then the currentMax+1 is the next not doable change
 	return currentMax+1;
 }
