@@ -8,6 +8,23 @@ fn print_vectors(x:Vec<Vec<i32>>){
     }
 }
 
+fn two_number_sum_n2(x:&mut Vec<i32>, t:i32) -> Vec<Vec<i32>> {
+    let mut res: Vec<Vec<i32>> = vec![];
+    for i in 0..x.len()-1 {
+        let k=i+1;
+        for j in k..x.len()-1 {
+
+            if t == x[i]+x[j] {
+                res.push(vec![]);
+                let len = res.len()-1;
+                res[len].push(x[i]);
+                res[len].push(x[j]);
+            }
+        }
+    }
+    return res;
+}
+
 fn two_number_sum(x:&mut Vec<i32>, t:i32) -> Vec<Vec<i32>> {
     x.sort();
     let mut l = 0;
