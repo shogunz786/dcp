@@ -13,6 +13,8 @@ int nonConstructibleChange(vector<int> coins) {
 	sort(coins.begin(),coins.end());
 	int currentMax = 0;
 	for(auto c: coins){
+		//current coin + 1 > sum of total change
+		//subset of coins so far can make change upto currentMax
 		if(c>currentMax+1){
 			return currentMax+1;
 		}
