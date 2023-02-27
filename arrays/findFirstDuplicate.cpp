@@ -10,14 +10,14 @@
 //result should be 5 not 2
 int findFirstDuplicate(vector<int> &array){
   int minIdx=INT_MAX;
-	for(int i=0; i<array.size(); i++){
-		for(int j=i+1; j<array.size(); j++){
-			if(array[i]==araay[j]){
-         minIdx=min(minIdx,j);
-      }
-		}
+  for(int i=0; i<array.size(); i++){
+	for(int j=i+1; j<array.size(); j++){
+	    if(array[i]==array[j]){
+               minIdx=min(minIdx,j);
+            }
 	}
-	return minIdx==INT_MAX?-1:array[minIdx];;
+  }
+  return minIdx==INT_MAX?-1:array[minIdx];;
 }
 
 int firstDuplicateValue(vector<int> array) {
