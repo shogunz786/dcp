@@ -23,6 +23,7 @@ void helper(BinaryTree* root, vector<int> &v, int sum){
 		return;
 	}
 	sum+=root->value;
+	//capture sum on reaching the leaf with no children
 	if(root->left==NULL && root->right==NULL){
 		v.push_back(sum);
 		return;
