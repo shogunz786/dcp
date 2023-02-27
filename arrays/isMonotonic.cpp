@@ -5,19 +5,19 @@
  */
 
 //time O(N) and space O(1)
-vector<int> moveElementToEnd(vector<int> array, int toMove) {
-	int l=0, r=array.size()-1;
-	//skip already moved elements
-	while(r>=l && array[r]==toMove){
-		r--;
-	}
-	while(l<r){
-		if(array[l]==toMove){
-			swap(array[l],array[r]);
-			r--;
-		}else{
-			l++;
-		}
-	}
-	return array;
+bool isMonotonic(vector<int> array) {
+  // Write your code here.
+  bool decr=true;
+  bool incr=true;
+  for(int i=1; i<array.size(); i++){
+    if(array[i-1]>array[i] && decr){//0>1 incr
+      decr = false;
+    }else if(array[i-1]<array[i] && incr){//0<1 decr
+      incr = false;
+    }
+    if(decr==false && incr==false){
+      return false;
+    }
+  }
+  return decr||incr;
 }
