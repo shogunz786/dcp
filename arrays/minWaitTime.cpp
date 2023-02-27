@@ -20,11 +20,11 @@ int minimumWaitingTime(vector<int> queries) {
 //O(nlog(n) time and O(1) space
 int minimumWaitingTime(vector<int> queries) {
   // Write your code here.
-	sort(queries.begin(), queries.end());
-	int total=0;
-	for(int i=0; i<queries.size(); i++){
-		//add as many times as the jobs waiting in queue
-    total+=queries[i]*(queries.size()-1-i);
-	}
-	return total;
+  sort(queries.begin(), queries.end());
+  int total=0;
+  for(int i=0; i<queries.size(); i++){
+     //total the query times * number of remaining tasks in queue
+     total+=queries[i]*(queries.size()-1-i);
+  }
+  return total;
 }
