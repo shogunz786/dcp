@@ -18,17 +18,19 @@ public:
 //average time O(log(N)) and space O(log(N)) depth of the tree
 int helper(BST *tree, int target, int closest){
 	if(tree==NULL){
-     return closest;
+           return closest;
 	}
-	if(abs(target-closest)>abs(target-tree->value)){
-     closest = tree->value;
+	//while traversing towards the target
+        //keep track of the closest value so far
+ 	if(abs(target-closest)>abs(target-tree->value)){
+           closest = tree->value;
 	}
 	if(target<tree->value){
-     return helper(tree->left, target, closest);
+           return helper(tree->left, target, closest);
 	}else if(target>tree->value){
-     return helper(tree->right, target, closest);
+           return helper(tree->right, target, closest);
 	}else{
-     return closest;
+           return closest;
 	}
 }
 int findClosestValueInBst(BST *tree, int target) {
@@ -40,6 +42,8 @@ int findClosestValueInBst(BST *tree, int target) {
   // Write your code here.
   int closest=tree->value;
   while(tree){
+    //while traversing towards the target
+    //keep track of the closest value so far
     if(abs(target-closest)>abs(target-tree->value)){
        closest=tree->value;
     }
