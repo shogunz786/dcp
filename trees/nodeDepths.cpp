@@ -25,15 +25,17 @@ int nodeDepths(BinaryTree *root) {
 	stNode.push({root, 0});
 	int sum=0;
 	while(!stNode.empty()){
-     struct nodeDepth nd = stNode.top();
-		 stNode.pop();
-		 sum+=nd.depth; 
-		 if(nd.root->left){
-        stNode.push({nd.root->left, nd.depth+1});
-		 }
-		 if(nd.root->right){
-        stNode.push({nd.root->right, nd.depth+1});
-		 }
+            struct nodeDepth nd = stNode.top();
+	    stNode.pop();
+	    //sum up node depths as we 
+	    //traverse towards leafs
+	    sum+=nd.depth; 
+	    if(nd.root->left){
+               stNode.push({nd.root->left, nd.depth+1});
+	    }
+	    if(nd.root->right){
+               stNode.push({nd.root->right, nd.depth+1});
+	    }
 	}
-  return sum;
+       return sum;
 }
