@@ -3,6 +3,7 @@ bool sortfunc(vector<int> a, vector<int> b)
 	if(a.size() !=2 || b.size()!=2) return false;
 	return a[0]<b[0];
 }
+//O(nlog(n)) time and O(n) space
 vector<vector<int>> mergeIntervals(vector<vector<int>> arr)
 {
 	sort(arr.begin(), arr.end(), sortfunc);
