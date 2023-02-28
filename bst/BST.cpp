@@ -201,6 +201,36 @@ class BST
             return *this;
         }
 
+//O(n) time and O(n) space
+void inOrderTraverse(BST *tree, vector<int> &array) {
+  if(tree==NULL){
+    return;
+  }
+  inOrderTraverse(tree->left,array);
+  array.push_back(tree->value);
+  inOrderTraverse(tree->right,array);
+}
+    
+//O(n) time and O(n) space
+void preOrderTraverse(BST *tree, vector<int> &array) {
+  if(tree==NULL){
+    return;
+  }
+  array.push_back(tree->value);
+  preOrderTraverse(tree->left,array);
+  preOrderTraverse(tree->right,array);
+}
+    
+//O(n) time and O(n) space
+void postOrderTraverse(BST *tree, vector<int> &array) {
+  if(tree==NULL){
+    return;
+  }
+  postOrderTraverse(tree->left,array);
+  postOrderTraverse(tree->right,array);
+  array.push_back(tree->value);
+}
+    
 //average time O(logN) and space O(1)
 //worst time O(N) and space O(1)
         BST &removeIter(int val, BST* parent=nullptr)
