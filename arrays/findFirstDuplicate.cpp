@@ -8,6 +8,7 @@
 
 //[9, 13, 6, 2, 3, 5, 5, 5, 3, 2, 2, 2, 2, 4, 3]
 //result should be 5 not 2
+//O(n^2) time and O(1) space
 int findFirstDuplicate(vector<int> &array){
   int minIdx=INT_MAX;
   for(int i=0; i<array.size(); i++){
@@ -20,6 +21,7 @@ int findFirstDuplicate(vector<int> &array){
   return minIdx==INT_MAX?-1:array[minIdx];;
 }
 
+//O(n) time and O(1) space
 int firstDuplicateValue(vector<int> array) {
 	for(int i=0; i<array.size(); i++){
 		int v=abs(array[i]);
