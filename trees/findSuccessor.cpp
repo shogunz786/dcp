@@ -26,6 +26,7 @@ void inorder(BinaryTree *tree, vector<BinaryTree*> &v){
 }
 
 //do inorder and capture in a vector and secrch for given node and return the next in the list
+//O(n) time and O(n) space
 BinaryTree *findSuccessor(BinaryTree *tree, BinaryTree *node) {
 	// Write your code here.
 	vector<BinaryTree*> v;
