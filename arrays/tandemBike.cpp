@@ -13,6 +13,7 @@
 #include <vector>
 using namespace std;
 
+//O(nlog(n)) time and O(1) space - n number of bikes
 int tandemBicycle(vector<int> redShirtSpeeds, vector<int> blueShirtSpeeds,
                   bool fastest) {
 	//sort blue riders 
@@ -20,10 +21,10 @@ int tandemBicycle(vector<int> redShirtSpeeds, vector<int> blueShirtSpeeds,
 	if(!fastest){
 		 //sort red riders in desc order
 	   sort(redShirtSpeeds.begin(),redShirtSpeeds.end(),greater<int>());
-  }else{
+        }else{
 		 //sort red riders 
 	   sort(redShirtSpeeds.begin(),redShirtSpeeds.end());
-  }
+        }
 	int total=0;
 	for(int i=0; i<redShirtSpeeds.size(); i++){
 		int  r = redShirtSpeeds[i];
@@ -33,6 +34,6 @@ int tandemBicycle(vector<int> redShirtSpeeds, vector<int> blueShirtSpeeds,
 		//in cse of slowest match slow red rider with slow blue rider
 		total+=max(r,b);
 	}
-  return total;
+        return total;
 }
 
