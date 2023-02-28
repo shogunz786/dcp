@@ -7,7 +7,6 @@
 
 //time O(N) and space O(d), d - depth
 int productSum(vector<any> array, int level=1) {
-	// Write your code here.
 	int sum=0;
 	for(auto a: array){
 		if(a.type()==typeid(int)){
