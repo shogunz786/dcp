@@ -10,7 +10,8 @@ class BST:
         self.right = None
 
 
-//time O(N) and space O(1)
+#Average case :O(log(n)) time and O(1) space
+#Worst case: O(n) time and O(1) space
 def findClosestValueInBstIter(tree, target):
     closest=tree.value
 	while tree is not None:
@@ -25,8 +26,8 @@ def findClosestValueInBstIter(tree, target):
 def findClosestValueInBst(tree, target):
 	return findClosestValueInBstRecur(tree, target, tree.value)
 
-//time O(N) and worst space O(N)
-//average time O(log(N)) and space O(log(N)) depth of the tree
+#Average case :O(log(n)) time and O(log(n)) space
+#Worst case: O(n) time and O(n) space
 def findClosestValueInBstRecur(tree, target, closest):
 	if tree is None:
 		return closest
