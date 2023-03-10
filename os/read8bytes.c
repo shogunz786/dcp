@@ -16,10 +16,6 @@ Assume there is a piece of hardware (say microcontroller) feeding in 12 bit valu
 
 #define VALID_BITS 0xff
 
-uint8_t get_valid_lsb(uint32_t i){
-    return (i & VALID_BITS);
-}
-
 vector<uint8_t> find_valid_bits(uint32_t *array, int len){
   vector<uint8_t> res;
   uint8_t val = (uint8_t *)array;
@@ -31,10 +27,10 @@ vector<uint8_t> find_valid_bits(uint32_t *array, int len){
        }
        uint32_t val = *((uint8_t*)(array+i));
        res.push_back((val&(1<<8))>>8);//first
-       res.push_back(val&(0xff);//second
+       res.push_back(val&(VALID_BITS);//second
        i++;
        if(i!=len && i+4>len){
-        res.push_back(val&(0xff);//second
+        res.push_back(val&(VALID_BITS);//second
         break;
        }
   }
