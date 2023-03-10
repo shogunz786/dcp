@@ -32,7 +32,7 @@ class BoundedHashMap<Key, Val> {
 
       Hashmap::iterator it = map.find(k);
       if (it == map.end()) {
-         map.;
+         map[k]=v;
       } else {
          // we did not add the item to the map since
          // it already existed.  Count back up.
