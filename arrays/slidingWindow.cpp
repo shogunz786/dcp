@@ -57,13 +57,21 @@ vector<int> find_max_sliding_window2(vector<int>& v, int window_size) {
  vector<int> result;
  deque<int> temp;
  for(int i=0; i<v.size(); i++){
+     //1. Process the first w elements to initiate the window deque.
+     //2. Remove indexes of all elements smaller than the 
+     //   current element from the window.
      while(temp.size() && v[temp.back()]<v[i])
            temp.pop_back();
+     //3. Add the current element index to the window.
     temp.push_back(i); 
+    //4. check if first set of w elements already in the window
     if(i>=window_size-1){
+         //5. In the window, only keep the indexes of elements
+         //   from the current sliding window.
          while(temp.size() && temp.front()<=i-window_size)
             temp.pop_front();
        cout<<v[temp.front()]<<endl;
+       //6. Add the first element of the window to the output list.
        result.push_back(v[temp.front()]);
     }
  }
