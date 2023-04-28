@@ -3,16 +3,16 @@ typedef pair<IPAddress, uint16_t> IPPortPair;
 unordered_map<IPPortPair, uint16_t> ipport_to_port_map;
 //nat port mapping to lan ip/port 
 unordered_map<uint16_t, IPPortPair> port_to_ipport_map;
-Inet nat;
+
 static uint16_t unique_port = 0;//begining from some port
 uint16_t generate_unique_port(){
   return unique_port++;
 }
 class IPAddress {
-  string ip;
+  uint32_t ip;
   public:
-    IPAddress(string ipaddr){ ipaddr = ip; }
-    uint32_t addr(){ //return ipaddr in uint32_t }
+    IPAddress(uint32_t ipaddr){ ip = ipaddr; }
+    uint32_t addr(){ return ip; }
 };
 struct Packet {
   uint32_t src_ip;
@@ -23,6 +23,11 @@ struct Packet {
   boo1 is_net;
   uint8_t buffer[PKT_SIZE];
 };
+class Inet {
+  public:
+  IPAddress ip;
+};
+Inet nat;
 bool check_packet(Packet *p){
   //packet validation checks
   if(...){ 
