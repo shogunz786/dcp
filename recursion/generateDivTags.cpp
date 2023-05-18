@@ -32,3 +32,22 @@ vector<string> generateDivTags(int numberOfTags) {
   generateDivTagsHelper(numberOfTags, numberOfTags, "", result);
   return result;
 }
+//time and complexity O(2^2n*n)
+    vector<string> generateDivTags(int n) {
+        vector<string> v;
+        queue<string> q;
+        q.push("<div>");
+        while(!q.empty()){
+            string str = q.front();
+            q.pop();
+            if(str.length() == 2*n){
+                if(isValid(str)){
+                    v.push_back(str);
+                }
+                continue; 
+            }
+            q.push(str+"<div>");
+            q.push(str+"</div>");
+        }
+        return v;
+    }
