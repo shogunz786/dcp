@@ -5,12 +5,13 @@
 This directory contains a comprehensive deadlock demonstration and prevention system with three main components:
 
 1. **DeadLock.cpp** - Original comprehensive demonstration (may hang in Test 1)
-2. **DeadLock_Simple.cpp** - Safe, controlled demonstration 
+2. **DeadLock_Simple.cpp** - Safe, controlled demonstration
 3. **DeadLock_Test.cpp** - Comprehensive test suite
 
 ## 🧪 Components Description
 
 ### 1. DeadLock.cpp - Full Demonstration
+
 ```bash
 # Compile and run (⚠️ Test 1 may hang - use Ctrl+C if needed)
 g++ -std=c++11 -pthread -O2 -o deadlock_test DeadLock.cpp
@@ -18,16 +19,18 @@ g++ -std=c++11 -pthread -O2 -o deadlock_test DeadLock.cpp
 ```
 
 **Features:**
+
 - Classic deadlock scenario (with intentional hanging demonstration)
 - Lock ordering prevention
-- Timeout-based prevention  
+- Timeout-based prevention
 - RAII lock management
 - Deadlock detection simulation
 - Multi-threaded stress testing
 
 **⚠️ Warning:** Test 1 intentionally creates a real deadlock to demonstrate the problem, then uses `detach()` to prevent infinite hanging.
 
-### 2. DeadLock_Simple.cpp - Safe Demonstration  
+### 2. DeadLock_Simple.cpp - Safe Demonstration
+
 ```bash
 # Compile and run (safe, won't hang)
 g++ -std=c++11 -pthread -O2 -o deadlock_simple DeadLock_Simple.cpp
@@ -35,6 +38,7 @@ g++ -std=c++11 -pthread -O2 -o deadlock_simple DeadLock_Simple.cpp
 ```
 
 **Features:**
+
 - Controlled deadlock scenarios with timeout safety
 - All prevention techniques without hanging risk
 - Comprehensive statistics and monitoring
@@ -44,6 +48,7 @@ g++ -std=c++11 -pthread -O2 -o deadlock_simple DeadLock_Simple.cpp
 **✅ Recommended:** Use this version for education and testing.
 
 ### 3. DeadLock_Test.cpp - Test Suite
+
 ```bash
 # Compile and run tests
 g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
@@ -51,6 +56,7 @@ g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
 ```
 
 **Features:**
+
 - 26 comprehensive test cases across 7 categories
 - Validates all prevention techniques
 - Stress testing with multiple threads
@@ -62,12 +68,14 @@ g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
 ### 1. Deadlock Fundamentals
 
 **Coffman Conditions (all must be present):**
+
 - **Mutual Exclusion:** Resources cannot be shared
-- **Hold and Wait:** Threads hold resources while waiting for others  
+- **Hold and Wait:** Threads hold resources while waiting for others
 - **No Preemption:** Resources cannot be forcibly taken
 - **Circular Wait:** Circular dependency in resource allocation
 
 **Classic Scenario:**
+
 ```cpp
 Thread 1: Lock A → Lock B → Work → Unlock B → Unlock A
 Thread 2: Lock B → Lock A → Work → Unlock A → Unlock B
@@ -77,14 +85,16 @@ Result: Thread 1 holds A, waits for B; Thread 2 holds B, waits for A = DEADLOCK!
 ### 2. Prevention Strategies
 
 #### A. Lock Ordering
+
 ```cpp
 // Both threads always acquire A before B
-Thread 1: Lock A → Lock B → Work → Unlock B → Unlock A  
+Thread 1: Lock A → Lock B → Work → Unlock B → Unlock A
 Thread 2: Lock A → Lock B → Work → Unlock B → Unlock A
 // Result: No circular wait, no deadlock
 ```
 
 #### B. Timeout-Based Locking
+
 ```cpp
 mutex_a.lock();
 if (mutex_b.try_lock_for(200ms)) {
@@ -97,6 +107,7 @@ mutex_a.unlock();
 ```
 
 #### C. RAII Management
+
 ```cpp
 class LockManager {
     ~LockManager() { release_all(); }  // Automatic cleanup
@@ -104,6 +115,7 @@ class LockManager {
 ```
 
 #### D. Deadlock Detection
+
 ```cpp
 // Monitor wait-for relationships
 // Detect cycles in dependency graph
@@ -114,21 +126,22 @@ class LockManager {
 
 The test suite validates:
 
-| Test Category | Tests | Result | Key Validation |
-|---------------|-------|--------|----------------|
-| Basic Operations | 4 | ✅ All Pass | Mutex functionality |
-| Deadlock Detection | 4 | ✅ All Pass | Timeout prevention |
-| Lock Ordering | 3 | ✅ All Pass | Sequential acquisition |
-| Timeout Prevention | 3 | ✅ All Pass | Non-blocking behavior |
-| RAII Management | 3 | ✅ All Pass | Automatic cleanup |
-| Stress Testing | 4 | ✅ All Pass | High concurrency |
-| Edge Cases | 5 | ✅ All Pass | Error conditions |
+| Test Category      | Tests | Result      | Key Validation         |
+| ------------------ | ----- | ----------- | ---------------------- |
+| Basic Operations   | 4     | ✅ All Pass | Mutex functionality    |
+| Deadlock Detection | 4     | ✅ All Pass | Timeout prevention     |
+| Lock Ordering      | 3     | ✅ All Pass | Sequential acquisition |
+| Timeout Prevention | 3     | ✅ All Pass | Non-blocking behavior  |
+| RAII Management    | 3     | ✅ All Pass | Automatic cleanup      |
+| Stress Testing     | 4     | ✅ All Pass | High concurrency       |
+| Edge Cases         | 5     | ✅ All Pass | Error conditions       |
 
 **Overall: 26/26 tests passed (100% success rate)**
 
 ## 🚀 Quick Start Guide
 
 ### For Learning (Recommended):
+
 ```bash
 cd /Users/op/github/dcp/os
 g++ -std=c++11 -pthread -O2 -o deadlock_simple DeadLock_Simple.cpp
@@ -136,12 +149,14 @@ g++ -std=c++11 -pthread -O2 -o deadlock_simple DeadLock_Simple.cpp
 ```
 
 ### For Complete Demonstration:
+
 ```bash
-g++ -std=c++11 -pthread -O2 -o deadlock_test DeadLock.cpp  
+g++ -std=c++11 -pthread -O2 -o deadlock_test DeadLock.cpp
 ./deadlock_test  # Press Ctrl+C if Test 1 hangs
 ```
 
 ### For Validation Testing:
+
 ```bash
 g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
 ./test_deadlock
@@ -149,39 +164,45 @@ g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
 
 ## 📈 Performance Characteristics
 
-| Prevention Method | Overhead | Effectiveness | Use Case |
-|------------------|----------|---------------|----------|
-| Lock Ordering | Minimal | Very High | Production systems |
-| Timeouts | Low | High | Network/IO operations |
-| RAII | None | High | C++ applications |
-| Detection | Medium | Medium | Debug/monitoring |
+| Prevention Method | Overhead | Effectiveness | Use Case              |
+| ----------------- | -------- | ------------- | --------------------- |
+| Lock Ordering     | Minimal  | Very High     | Production systems    |
+| Timeouts          | Low      | High          | Network/IO operations |
+| RAII              | None     | High          | C++ applications      |
+| Detection         | Medium   | Medium        | Debug/monitoring      |
 
 ## 🛠️ Real-World Applications
 
 **Database Systems:**
+
 - Transaction deadlock detection and resolution
 - Lock timeout mechanisms for query processing
 
 **Operating Systems:**
+
 - Resource allocation in kernels
 - Process synchronization primitives
 
 **Network Protocols:**
+
 - Connection establishment deadlocks
 - Distributed system consensus
 
 **GUI Applications:**
+
 - Event handling thread coordination
 - Background task synchronization
 
 ## 🔍 Debugging Tips
 
 1. **Enable Detailed Logging:**
+
    ```cpp
    cout << "[" << this_thread::get_id() << "] Acquiring " << mutex_name << endl;
    ```
 
 2. **Monitor Lock Hold Times:**
+
    ```cpp
    auto start = chrono::high_resolution_clock::now();
    // ... critical section ...
@@ -189,6 +210,7 @@ g++ -std=c++11 -pthread -O2 -o test_deadlock DeadLock_Test.cpp
    ```
 
 3. **Use ThreadSanitizer:**
+
    ```bash
    g++ -fsanitize=thread -g -o deadlock_debug DeadLock.cpp
    ./deadlock_debug
